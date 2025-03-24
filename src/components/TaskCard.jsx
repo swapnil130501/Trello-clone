@@ -1,7 +1,13 @@
-import React from 'react'
+import React from "react";
 
-export const TaskCard = () => {
+export const TaskCard = ({ tasks }) => {
     return (
-        <div>TaskCard</div>
-    )
-}
+        <div className="p-2">
+            {tasks.map((task) => (
+                <div key={task.id} className="p-2 bg-white border rounded mb-2">
+                    {task.name}
+                </div>
+            ))}
+        </div>
+    );
+};

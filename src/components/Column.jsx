@@ -1,36 +1,56 @@
 import React, { useState } from "react";
 import data from "../../column";
+import { TaskCard } from "./TaskCard";
 
 export const Column = () => {
-    const [column, setColumn] = useState(data.column);
+    const [columns, setColumns] = useState(data.columns);
 
     function createColumn() {
-        console.log("creating a new column");
-
         const newColumn = {
-            id: `column-${column.length + 1}`,
-            title: `New Column ${column.length + 1}`,
+            id: `column-${columns.length + 1}`,
+            title: `New Column ${columns.length + 1}`,
+            tasks: [],
         };
 
-        setColumn([...column, newColumn]);
+        setColumns([...columns, newColumn]);
+    }
+
+    function addTask(columnId) {
+        const updatedColumns = columns.map((col) => {
+            if(col.id === columnId) {
+                return {
+                    ...col,
+                    tasks: [...col.tasks, { id: `task-${col.tasks.length + 1}`, name: `Task ${col.tasks.length + 1}` }],
+                };
+            }
+            return col;
+        });
+
+        setColumns(updatedColumns);
+    }
+
+    function dragTask() {
+        
     }
 
     return (
         <div className="flex">
             <div className="flex gap-4 p-4">
-                {column.map((column) => (
+                {columns.map((column) => (
                     <div key={column.id} className="p-4 bg-gray-100 border rounded w-64">
                         <div className="p-2 bg-gray-600 text-white font-bold rounded-t">
                             {column.title}
                         </div>
-                        <div className="p-4 min-h-64">test</div>
-                        <div className="p-2 bg-gray-200 text-center rounded-b cursor-pointer">
+                        <TaskCard tasks={column.tasks} />
+                        <button
+                            className="p-2 bg-gray-200 text-center rounded-b cursor-pointer w-full"
+                            onClick={() => addTask(column.id)}
+                        >
                             Add Task
-                        </div>
+                        </button>
                     </div>
                 ))}
             </div>
-
             <div className="p-4">
                 <button className="p-4 bg-gray-100 border rounded w-32 cursor-pointer" onClick={createColumn}>
                     Add Column
